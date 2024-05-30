@@ -3,8 +3,6 @@ const router = express.Router();
 const Concert = require("../models/Concert.model")
 const app = express();
 
-
-
 router.get("/", (req, res, next) => {
   Concert.find()
   .then ( response => {
@@ -37,8 +35,8 @@ router.post("/", (req, res, next) => {
   }) 
 });
 
-router.put("/", (req, res, next) => {
-  Concert.findByIdAndUpdate(req.body._id, req.body, { new: true })
+router.put("/:concertId", (req, res, next) => {
+  Concert.findByIdAndUpdate(req.params.concertId, req.body, { new: true })
   .then( response => {
     if (response) {
       res.json( ["Element edited", response]) }
