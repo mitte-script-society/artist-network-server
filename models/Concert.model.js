@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const addressSchema = new Schema({
   street: {
@@ -61,20 +62,16 @@ const concertSchema = new Schema({
       type: Date,
       required: true
   },
-  prices: {
-    type: Map,
-    of: Number,
-    required: true
-  },
+  prices: Number,
   artist: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      //required: true
   },
   host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      //required: true
   }
 });
 

@@ -18,6 +18,9 @@ require("./config")(app);
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
 
+const concertRoutes= require("./routes/concert.routes");
+app.use("/concert", concertRoutes)
+
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
