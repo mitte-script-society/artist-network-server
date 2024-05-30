@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Concert = require("../models/Concert.model")
-const app = express();
 
 router.get("/", (req, res, next) => {
   Concert.find()
@@ -68,8 +67,7 @@ router.delete("/:concertId", (req, res, next) => {
   }) 
 });
 
-const errorHandler = require("../error-handling/index");
-app.use(errorHandler);
+
 
 module.exports = router;
 
