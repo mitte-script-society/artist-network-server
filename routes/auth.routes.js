@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const fileUploader = require("../config/cloudinary.config");
 
-
 // ℹ️ Handles password encryption
 const bcrypt = require("bcrypt");
 
@@ -134,7 +133,7 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
 });
 
 
-router.post("signup/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
   if (!req.file) {
     next(new Error("No file uploaded!"));
     return;
