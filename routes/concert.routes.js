@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Concert = require("../models/Concert.model")
+const app = express();
+
+
 
 router.get("/", (req, res, next) => {
   Concert.find()
@@ -8,7 +11,7 @@ router.get("/", (req, res, next) => {
     res.json({ elements: `Elements in list: ${response.length}`, list: response });
   })  
   .catch (error => {
-    console.log("Error", error)
+    next(error)
   })
 });
 
@@ -19,7 +22,7 @@ router.get("/:idConcert", (req, res, next) => {
     res.json(response)
   })
   .catch( error => {
-      console.log(error)
+    next(error)
   })
 
 });
@@ -30,29 +33,45 @@ router.post("/", (req, res, next) => {
     res.json(response);
   })  
   .catch (error => {
-    console.log("Error in Data Base", error)
+    next(error)
   }) 
 });
 
 router.put("/", (req, res, next) => {
   Concert.findByIdAndUpdate(req.body._id, req.body, { new: true })
   .then( response => {
-      res.json(response)
+    if (response) {
+      res.json( ["Element edited", response]) }
+      else {
+        res.json(["Element not found", null])
+      }
   })
   .catch( error =>{
-    res.json("Error", error)
+    next(error)
+
   })
 });
 
-router.delete("/", (req, res, next) => {
- Concert.findByIdAndDelete(req.body._id)
+router.delete("/:concertId", (req, res, next) => {
+  const {concertId} = req.params
+
+ Concert.findByIdAndDelete(concertId)
   .then ( response => {
-    res.json("Element Deleted");
+    if (response) {
+      res.json("Element Deleted")
+
+    } else {
+      res.json("Element not found")
+    }
+    
   })  
   .catch (error => {
-    console.log("buuuuuuu!")
+    next(error)
   }) 
 });
+
+const errorHandler = require("../error-handling/index");
+app.use(errorHandler);
 
 module.exports = router;
 
