@@ -62,16 +62,24 @@ const concertSchema = new Schema({
       type: Date,
       required: true
   },
+  duration: {
+    type: Number,
+    required: true
+    },
+  artistCost: {
+    type: Number,
+    // required: true
+    },
   prices: Number,
   artist: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      //required: true
+      required: true
   },
   host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      //required: true
+      required: true
   }
 });
 
