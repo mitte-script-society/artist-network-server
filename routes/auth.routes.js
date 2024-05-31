@@ -19,8 +19,8 @@ const saltRounds = 10;
 
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
-  const { email, password, name, city } = req.body;
 
+  const { email, password, name, city } = req.body;
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || name === "" || city === "") {
     res.status(400).json({ message: "Provide email, password, city and name" });
@@ -61,7 +61,6 @@ router.post("/signup", (req, res, next) => {
       // We return a pending promise, which allows us to chain another `then`
       req.body.password = hashedPassword;
 
-      console.log("Object ready to send", req.body);
       return User.create(req.body);
     })
     .then((createdUser) => {
@@ -70,10 +69,10 @@ router.post("/signup", (req, res, next) => {
       const { email, name, _id } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { email, name, _id };
+      const user = { email, name, _id};
 
       // Send a json response containing the user object
-      res.status(201).json({ user: user });
+      res.status(201).json(user);
     })
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 });
@@ -140,6 +139,7 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
   }  
   // Get the URL of the uploaded file and send it as a response.
   // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+  console.log("Upload successful. Info:", req.file.path)
   res.json({ fileUrl: req.file.path });
 });
 
