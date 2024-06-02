@@ -16,17 +16,17 @@ const addressSchema = new Schema({
   }
 });
 
-const pointSchema = new Schema({
-  type: {
-      type: String,
-      enum: ['Point'],
-      required: true
-  },
-  coordinates: {
-      type: [Number],
-      required: true
-  }
-});
+// const pointSchema = new Schema({
+//   type: {
+//       type: String,
+//       enum: ['Point'],
+//       required: true
+//   },
+//   coordinates: {
+//       type: [Number],
+//       required: true
+//   }
+// });
 
 const concertSchema = new Schema({
   title: {
@@ -50,14 +50,12 @@ const concertSchema = new Schema({
       type: String,
       required: true
   },
-  /* address: {
+  address: {
     type: addressSchema,
-    required: true
-},
+  },
   location: {
-    type: pointSchema,
-    required: true
-  }, */
+    type: [Number]
+  },
   date: {
       type: Date,
       required: true
@@ -76,6 +74,9 @@ const concertSchema = new Schema({
       ref: 'User',
       required: true
   },
+  genre: {
+    type: [String]
+},
   host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
