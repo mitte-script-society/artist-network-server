@@ -7,7 +7,7 @@ const { trusted } = require("mongoose");
 router.get("/:userId", (req, res, next) => {
   User.findById(req.params.userId)
   .populate('followedArtists', 'name artistConcerts artistDescription artistGenre picture groupName')
-  .populate('bookmarkedEvents', 'date city image description prices')
+  .populate('bookmarkedEvents', 'date city image description prices title')
   .then ( response => {
     if (response) {
     const { password, ...newResponse } = response.toObject(); //This line extracts the properties of response, but password.
