@@ -5,28 +5,13 @@ const { trusted } = require("mongoose");
 
 //Should we add the middleware to protect the route? 
 router.get("/:userId", (req, res, next) => {
-  console.log("calling to get info of specific user")
   User.findById(req.params.userId)
+  .populate('followedArtists', 'name artistConcerts artistDescription artistGenre picture groupName')
+  .populate('bookmarkedEvents', 'date city image description prices')
   .then ( response => {
     if (response) {
-    const newResponse = {
-      _id: response._id,
-      name: response.name,
-      picture: response.picture,
-      city: response.city,
-      isArtist: response.isArtist,
-      followedArtists: response.followedArtists,
-      bookmarkedEvents: response.bookmarkedEvents,
-      moreThanOne: response.moreThanOne,
-      groupName: response.groupName,
-      artistMembers: response.artistMembers,
-      artistFee: response.artistFee,
-      artistDescription: response.artistDescription,
-      artistPictures: response.artistPictures,
-      artistVideos: response.artistVideos,
-      artistAudio: response.artistAudio,
-      artistGenre: response.artistGenre,
-    }
+    const { password, ...newResponse } = response.toObject(); //This line extracts the properties of response, but password.
+  
     res.json(newResponse);
     } else {
     res.json(null)
