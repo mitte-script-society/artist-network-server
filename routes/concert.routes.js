@@ -6,7 +6,7 @@ const fileUploader = require("../config/cloudinary.config");
 
 router.get("/", (req, res, next) => {
   Concert.find()
-  .populate('artist', 'name groupName picture')
+  .populate('artist', 'name groupName picture _id')
   .then ( response => {
     res.json({ elements: `Elements in list: ${response.length}`, list: response });
   })  
@@ -18,6 +18,7 @@ router.get("/", (req, res, next) => {
 router.get("/:idConcert", (req, res, next) => {
   const {idConcert} = req.params
   Concert.findById(idConcert)
+  .populate('artist', 'name groupName picture _id city artistFee')
   .then( (response) => {
     res.json(response)
   })
