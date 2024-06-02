@@ -21,9 +21,9 @@ const fileUploader = require("../config/cloudinary.config");
     const {artistId} = req.params
     User.findById(artistId)
     .then( (foundArtist) => {
-    const { name, _id, artistFee } = foundArtist;
+    const { name, _id, artistFee, artistDescription, city, picture, artistGenre, artistVideos, artistAudio, artistWebsite} = foundArtist;
         // Create a new object that doesn't expose the password
-    const artist = { name, _id, artistFee};
+    const artist = { name, _id, artistFee, artistDescription, picture, city, artistGenre, artistVideos, artistAudio, artistWebsite};
 
       res.json(artist)
     })
