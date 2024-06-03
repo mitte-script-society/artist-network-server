@@ -16,17 +16,6 @@ const addressSchema = new Schema({
   }
 });
 
-// const pointSchema = new Schema({
-//   type: {
-//       type: String,
-//       enum: ['Point'],
-//       required: true
-//   },
-//   coordinates: {
-//       type: [Number],
-//       required: true
-//   }
-// });
 
 const concertSchema = new Schema({
   title: {

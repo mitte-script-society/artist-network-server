@@ -95,7 +95,11 @@ const userSchema = new Schema(
     }],
     artistReferences: [{
         type: [referenceSchema]
-    }]
+    }],
+    conversations: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Conversation'
+    }],
   },
   {
     timestamps: true,
