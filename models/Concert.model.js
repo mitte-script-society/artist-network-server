@@ -4,15 +4,15 @@ const { Schema } = mongoose;
 const addressSchema = new Schema({
   street: {
       type: String,
-      required: true
+      required: true,
   },
   number: {
       type: String,
-      required: true
+      required: true,
   },
   zipcode: {
       type: String,
-      required: true
+      required: true,
   }
 });
 
@@ -52,9 +52,12 @@ const concertSchema = new Schema({
   },
   address: {
     type: addressSchema,
+    required: true,
+    default: {street: "Winsstr", number: "29", zipcode: "10439"}
   },
   location: {
-    type: [Number]
+    type: [Number],
+    default: [0,0]
   },
   date: {
       type: Date,
@@ -75,7 +78,8 @@ const concertSchema = new Schema({
       required: true
   },
   genre: {
-    type: [String]
+    type: [String],
+    required: true
 },
   host: {
       type: mongoose.Schema.Types.ObjectId,
