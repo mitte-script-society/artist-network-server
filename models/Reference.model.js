@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const referenceSchema = new Schema ( {
-  reciever: {
+  receiver: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -10,6 +10,10 @@ const referenceSchema = new Schema ( {
   sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true
+  },
+  senderName:{
+    type: String,
     required: true
   },
   date: {

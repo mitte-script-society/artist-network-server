@@ -25,7 +25,7 @@ router.put("/:idReference", (req, res, next) => {
 //Get all references filtered by userId (all references from artist X)
 router.get("/:idUser", (req, res, next) => {
     const idUser = req.params.idUser;
-    Reference.find({reciever: idUser})
+    Reference.find({receiver: idUser})
     .populate('sender', 'name picture city')
     .then ( response => {
       res.json(response);
