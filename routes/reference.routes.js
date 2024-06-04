@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Reference = require("../models/Reference.model")
 const fileUploader = require("../config/cloudinary.config");
+const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 
 //reciever, sender, date, content
 
@@ -14,7 +15,7 @@ router.post("/", (req, res, next) => {
 });
 
 //Editing a given reference
-router.put("/:idReference", (req, res, next) => {
+router.put("/:idReference", isAuthenticated, (req, res, next) => {
   Reference.findByIdAndUpdate(req.params.idReference, req.body, {new: true})
   .then ( response => {
     res.status(200).json(response)
@@ -37,7 +38,7 @@ router.get("/:idUser", (req, res, next) => {
 
 
 //Delete 
-router.delete("/:idReference", (req, res, next) => {    
+router.delete("/:idReference", isAuthenticated, (req, res, next) => {    
   Reference.findByIdAndDelete(req.params.idReference)
     .then ( response => {
       res.json(response);

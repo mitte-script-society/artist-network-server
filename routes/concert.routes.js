@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Concert = require("../models/Concert.model")
 const fileUploader = require("../config/cloudinary.config");
+const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 
 
 router.get("/", (req, res, next) => {
@@ -28,7 +29,7 @@ router.get("/:idConcert", (req, res, next) => {
 
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", isAuthenticated, (req, res, next) => {
   Concert.create(req.body)
   .then ( response => {
     res.json(response);
@@ -38,7 +39,7 @@ router.post("/", (req, res, next) => {
   }) 
 });
 
-router.put("/:concertId", (req, res, next) => {
+router.put("/:concertId", isAuthenticated, (req, res, next) => {
   Concert.findByIdAndUpdate(req.params.concertId, req.body, { new: true })
   .then( response => {
     if (response) {
@@ -53,7 +54,7 @@ router.put("/:concertId", (req, res, next) => {
   })
 });
 
-router.delete("/:concertId", (req, res, next) => {
+router.delete("/:concertId", isAuthenticated, (req, res, next) => {
   const {concertId} = req.params
 
  Concert.findByIdAndDelete(concertId)
@@ -71,7 +72,7 @@ router.delete("/:concertId", (req, res, next) => {
   }) 
 });
 
-router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+router.post("/upload", isAuthenticated, fileUploader.single("imageUrl"), (req, res, next) => {
   if (!req.file) {
     next(new Error("No file uploaded!"));
     return;
