@@ -6,7 +6,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 
 //reciever, sender, date, content
 
-router.post("/", (req, res, next) => {
+router.post("/", isAuthenticated, (req, res, next) => {
   Reference.create(req.body)
   .then ( response => {
     res.status(200).json(response)

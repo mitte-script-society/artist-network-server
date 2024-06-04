@@ -29,7 +29,7 @@ const concertSchema = new Schema({
   image: {
       type: String,
       required: true,
-      default: 'default-image-url'
+      default: 'https://res.cloudinary.com/deckhnump/image/upload/v1717238495/f_qfxg1b.png'
   },
   isPublic: {
       type: Boolean,
