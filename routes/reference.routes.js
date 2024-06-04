@@ -26,7 +26,7 @@ router.put("/:idReference", (req, res, next) => {
 router.get("/:idUser", (req, res, next) => {
     const idUser = req.params.idUser;
     Reference.find({receiver: idUser})
-    .populate('sender', 'name picture city')
+    //.populate('sender', 'name picture city')
     .then ( response => {
       res.json(response);
     })  
@@ -49,10 +49,8 @@ router.delete("/:idReference", (req, res, next) => {
 
 //Getting one by reference
 router.get("/onlyOne/:idReference", (req, res, next) => {
-  console.log("aaaaaaaaaaaaaaaaaaaaa", req.params.idReference)
   Reference.findById(req.params.idReference)
   .then ((response) => {
-    console.log("REspuesta", response)
     res.json(response)
   })
   .catch (error => next(error))
