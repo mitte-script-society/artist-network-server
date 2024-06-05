@@ -33,7 +33,8 @@ const concertSchema = new Schema({
   },
   isPublic: {
       type: Boolean,
-      required: true
+      required: true,
+      default: true
   },
   city: {
       type: String,
