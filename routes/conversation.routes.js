@@ -3,25 +3,20 @@ const router = express.Router();
 const Conversation = require("../models/Conversation.model")
 
 
-router.post("/newConversation", (req, res, next) => {
+router.post("/create-conversation", (req, res, next) => {
   Conversation.create(req.body)
   .then( response => {
     res.json(response)
   })
-
   .catch (error => {
     next(error)
   })
-
 })
 
-//Write new message: finds the conversation and pushes message into the new array
-router.put("/createMessage", (req, res, next) => {
-  const {conversationId, newMessage} = req.body
-  console.log()
-
+router.put("/createMessage/:conversationId", (req, res, next) => {
+  const {conversationId} = req.params;
   Conversation.findByIdAndUpdate(conversationId,
-    {"$push": {messages: newMessage} }, { new: true}
+    {"$push": {messages: req.body} }, { new: true}
   )
   .then ( response => {
     res.json(response);
@@ -31,13 +26,9 @@ router.put("/createMessage", (req, res, next) => {
   })
 });
 
-// get all the messages of one conversation
-router.get("/:conversationId", (req, res, next) => {
-  Conversation.findById(req.params.conversationId)
-      .populate({
-          path: 'messages.sender',
-          select: 'name picture' 
-      })
+// get all the messages of one conversation => populate of sender not needed
+router.get("/messages/:conversationId", (req, res, next) => {
+  Conversation.findById(req.params.conversationId, '-participants -_id')
       .then(response => {
           res.json(response);
       })

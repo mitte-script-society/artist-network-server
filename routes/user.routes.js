@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User.model");
-const { trusted } = require("mongoose");
 
 //Should we add the middleware to protect the route? 
 router.get("/:userId", (req, res, next) => {
@@ -18,8 +17,9 @@ router.get("/:userId", (req, res, next) => {
   })
   .then ( response => {
     if (response) {
-    const { password, ...newResponse } = response.toObject();
-  
+      console.log(response.conversations[0])
+      const { password, ...newResponse } = response.toObject();
+
     res.json(newResponse);
     } else {
     res.json(null)
@@ -65,5 +65,27 @@ router.put("/bookmark", ( (req, res, next) => {
 
   }))
 
+  router.put("/add-conversation", (req, res, next) => {
+    const {userId, userId2, conversationId} = req.body
+  
+    User.updateMany(
+      { _id: { $in: [userId, userId2] } },
+      { $push: { conversations: conversationId } },
+      { new: true }
+    )
+      .then((response) => {
+        console.log("Respuesta", response.matchedCount)
+        if (response.matchedCount === 2) {
+          res.json({ message: "Usuarios actualizados correctamente" });
+        } else {
+          res.status(404).json({ error: "Usuarios no encontrados" });
+        }
+      })
+      .catch((error) => {
+        console.error("Error al actualizar usuarios", error);
+        next(error);
+      });
+  });
+  
 
 module.exports = router;
