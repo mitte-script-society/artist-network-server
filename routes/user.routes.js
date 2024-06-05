@@ -2,6 +2,19 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User.model");
 
+//Get all users: 
+router.get("/", (req, res, next) => {
+  User.find( {}, '-password')
+    .then(response => {
+     
+      res.json(response);
+    })
+    .catch(error => {
+      next(error);
+    });
+});
+
+
 //Should we add the middleware to protect the route? 
 router.get("/:userId", (req, res, next) => {
   User.findById(req.params.userId)
