@@ -31,6 +31,11 @@ io.on('connection', (socket) => {
     console.log("message recieved in socket:", newMessageRecieved)
     io.emit("new message", newMessageRecieved )
   })
+
+  socket.on ("user typing", (typingInfo) => {
+    io.emit("user typing", typingInfo)
+  })
+  
   
 })
 
