@@ -30,7 +30,6 @@ router.get("/:userId", (req, res, next) => {
   })
   .then ( response => {
     if (response) {
-      console.log(response.conversations[0])
       const { password, ...newResponse } = response.toObject();
 
     res.json(newResponse);
@@ -46,7 +45,6 @@ router.get("/:userId", (req, res, next) => {
 router.put("/", (req, res, next) => {
   User.findByIdAndUpdate(req.body.userId, req.body.userInfo, {new:true})
   .then( (response) => {
-    console.log("Respuesta del put:", response)
     if (response) {
       res.status(200).json(response)
       return
@@ -87,7 +85,6 @@ router.put("/bookmark", ( (req, res, next) => {
       { new: true }
     )
       .then((response) => {
-        console.log("Respuesta", response.matchedCount)
         if (response.matchedCount === 2) {
           res.json({ message: "Usuarios actualizados correctamente" });
         } else {

@@ -21,18 +21,15 @@ io.on('connection', (socket) => {
   console.log('connected to socket.io')
 
   socket.on('setup', (userData) => {
-    socket.join(userData);
+    console.log("Setup action recieved", userData)
+    //socket.join(userData);
     socket.emit('connected')
   });
 
-  socket.on("join chat", (room) => {
-    socket.join(room); 
-    console.log("user joined room:" + room)
-  })
 
   socket.on ("new message", (newMessageRecieved) => {
-    const chat = newMessageRecieved.chat
-
+    console.log("message recieved in socket:", newMessageRecieved)
+    io.emit("new message", newMessageRecieved )
   })
   
 })

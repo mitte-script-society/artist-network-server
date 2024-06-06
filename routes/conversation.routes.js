@@ -4,7 +4,6 @@ const Conversation = require("../models/Conversation.model")
 
 
 router.post("/create-conversation", (req, res, next) => {
-  console.log(req.body)
 
   Conversation.create(req.body)
   .then( response => {
