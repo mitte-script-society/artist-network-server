@@ -10,7 +10,7 @@ router.get("/", (req, res, next) => {
     res.json({ elements: `Elements in list: ${response.length}`, list: response });
   })  
   .catch (error => {
-    console.log("buuuuuuu!")
+    console.log("Error", error)
   })
 });
 

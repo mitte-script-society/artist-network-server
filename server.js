@@ -22,7 +22,6 @@ io.on('connection', (socket) => {
 
   socket.on('setup', (userData) => {
     console.log("Setup action recieved", userData)
-    //socket.join(userData);
     socket.emit('connected')
   });
 
@@ -32,7 +31,7 @@ io.on('connection', (socket) => {
     io.emit("new message", newMessageRecieved )
   })
 
-  socket.on ("user typing", (typingInfo) => {
+    socket.on ("user typing", (typingInfo) => {
     io.emit("user typing", typingInfo)
   })
   
