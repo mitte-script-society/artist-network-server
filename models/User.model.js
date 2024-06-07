@@ -46,7 +46,7 @@ const userSchema = new Schema(
     }],
     city: {
         type: String,
-        required: true
+        default: 'Earth'
     },
     location: {
         type: String
