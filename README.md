@@ -5,7 +5,7 @@
   - We used Cloudinary API for the image upload of the users and socket.io for Web Sockets and the Chat Implementation
   - A repository with the frontend code can be found here: https://github.com/mitte-script-society/artist-network-client
 
-- Instructions to run this app in my computer.
+- Instructions to run this app in my computer:
   - git clone
   - install dependencies (`npm install`)
   - create a `.env` file with`
