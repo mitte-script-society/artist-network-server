@@ -28,13 +28,18 @@ io.on('connection', (socket) => {
 
   socket.on ("new message", (newMessageRecieved) => {
     console.log("message recieved in socket:", newMessageRecieved)
-    io.emit("new message", newMessageRecieved )
+    io.to(newMessageRecieved.destiny).emit("new message", newMessageRecieved )
+  })
+
+  socket.on ("join-main", (room) => {
+    console.log("joined room:", room)
+    socket.join(room);
   })
 
     socket.on ("user typing", (typingInfo) => {
     io.emit("user typing", typingInfo)
   })
-  
+
   
 })
 
