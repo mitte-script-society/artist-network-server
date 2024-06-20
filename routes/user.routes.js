@@ -26,21 +26,27 @@ router.get("/:userId", (req, res, next) => {
       path: 'participants',
       select: 'name picture'
     },
-    select: 'participants' 
+    select: 'participants updatedAt'
   })
-  .then ( response => {
+  .then(response => {
     if (response) {
       const { password, ...newResponse } = response.toObject();
-
-    res.json(newResponse);
+      // Convert the Map (notifications) to an object
+      const notificationsObject = {};
+      response.notifications.forEach((value, key) => {
+        notificationsObject[key] = value;
+      });
+      newResponse.notifications = notificationsObject;
+      res.json(newResponse);
     } else {
-    res.json(null)
+      res.json(null);
     }
-  })  
-  .catch (error => {
-    next(error)
   })
+  .catch(error => {
+    next(error);
+  });
 });
+
 
 router.put("/", (req, res, next) => {
   User.findByIdAndUpdate(req.body.userId, req.body.userInfo, {new:true})
@@ -76,7 +82,7 @@ router.put("/bookmark", ( (req, res, next) => {
 
   }))
 
-  router.put("/add-conversation", (req, res, next) => {
+router.put("/add-conversation", (req, res, next) => {
     const {userId, userId2, conversationId} = req.body
   
     User.updateMany(
@@ -96,6 +102,64 @@ router.put("/bookmark", ( (req, res, next) => {
         next(error);
       });
   });
+
+
+router.put("/add-notification/:userId", (req, res, next) => {
+    const { userId } = req.params;
+    const { idOrigin, notificationType } = req.body;
   
+    User.findById(userId)
+      .then( user => {
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        if (user.notifications.has(idOrigin)) {
+          // Increment the quantity if the notification exists
+          user.notifications.get(idOrigin).quantity += 1;
+        } else {
+          // Add a new notification if it doesn't exist
+          user.notifications.set(idOrigin, {
+            quantity: 1,
+            notificationType: notificationType // or 'request', depending on your logic
+          });
+        }
+       // Save the updated user document
+        return user.save();
+      })
+      .then((response) => {
+        console.log(response.notifications)
+        res.json(response);
+      })
+      .catch(error => {
+        console.error("Internal error", error);
+        next(error);
+      });
+  });  
+
+router.put("/remove-notification/:userId", (req, res, next) => {
+    const { userId } = req.params;
+    const { idOrigin} = req.body;
+    User.findById(userId)
+      .then( user => {
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+        if (user.notifications.has(idOrigin)) {
+          user.notifications.delete(idOrigin)
+        }
+        return user.save();
+      })
+      .then((response) => {
+        console.log(response.notifications)
+        res.json(response);
+      })
+      .catch(error => {
+        console.error("Internal error", error);
+        next(error);
+      });
+  });  
+
+
 
 module.exports = router;

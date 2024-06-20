@@ -17,6 +17,17 @@ const referenceSchema = new Schema ( {
   }
 })
 
+const notificationSchema = new mongoose.Schema({
+  quantity: {
+    type: Number,
+  },
+  notificationType: {
+    type: String,
+    enum: ['message', 'request'],
+  }
+}, {timestamps: true}, { _id: false } 
+);
+
 const userSchema = new Schema(
   {
     name: {
@@ -100,6 +111,10 @@ const userSchema = new Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Conversation'
     }],
+    notifications: {
+      type: Map,
+      of: notificationSchema
+    }
   },
   {
     timestamps: true,
