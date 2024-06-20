@@ -9,7 +9,6 @@ const server = app.listen(PORT, () => {
 
 const FRONTEND_URL = process.env.ORIGIN || "http://localhost:5173";
 
-
 const io = require('socket.io')(server, {
   pingTimeout: 60000,
   cors: {
@@ -19,12 +18,6 @@ const io = require('socket.io')(server, {
 
 io.on('connection', (socket) => {
   console.log('connected to socket.io')
-
-  socket.on('setup', (userData) => {
-    console.log("Setup action recieved", userData)
-    socket.emit('connected')
-  });
-
 
   socket.on ("new message", (newMessageRecieved) => {
     console.log("message recieved in socket:", newMessageRecieved)

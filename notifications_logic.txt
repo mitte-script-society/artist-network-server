@@ -1,0 +1,72 @@
+1. New property in user schema: object with information of the notifications received by user.
+When fetching the information of the logged user, we have now access to an object like this: 
+
+notifications: 
+  {
+    **id of conversation A**: {quantitty: 1, type: message},
+    **id of conversation B**: {quantitty: 3, type: message},
+    **id of conversation C**: {quantitty: 2, type: message},
+    **id of conversation D**: {quantitty: 10, type: message},    
+  }
+
+2. After A sends a message to B, if B is not in the chatbox... 
+  
+    call to route add-notification with: (user.routes 107:)
+      _id of reciever 
+      _id of conversation (idOrigin)
+      type: "message"
+
+      1. find the receiver (user by id)
+      2. If the object "notifications" of the user already has this property (if it already recieved a notification from this conversation)
+          => add +1 to the property quantity
+      3. If it does not have such a property, then 
+          => add the property to the object and set quantity to 1
+
+3. Getting and counting notifications: 
+
+  App: created state variable that will be shared with NavBar and Chat:
+      [changeInNotifications, setChangeInNotifications] = useState(0)
+  
+  NavBar:
+    Reads the notifications object of user, and counts the total of notification.
+    The useEffect that counts the notifications, will run when there is a change in: 
+        changeInNotifications or userInformation.notifications.
+    
+    After counting, it displays the number of notifications.
+  
+  Chat:
+    We read the notifications of userInformation and store it in notificationsObject:
+      (The properties of this object are the id's of a conversation (the origin of the notification))
+
+    In the use Effect that builds the object-conversation with all the information needed:
+    Added the property notifications to each object-conversation:
+
+    Each conversations asks to objectNotification: 
+      do you have a property that matches my _id ?
+         if not, the value of notifications will be 0 
+         if it does, the value of notifications will be .quantity: 
+
+    Line 30:
+      if the notificationsObject has a property that matches the id of the conversation, 
+      then we set the value of notifications to the value of "quantity" in the notifications object.
+
+      notifications: notificationsObject[idConversation]? notificationsObject[idConversation].quantity : 0
+
+      With the information in the property notifications for each conversation, we render the number of notifications. 
+
+
+  Remove notifications:
+      When you open a chatbox, the notifications of that specific conversations should be removed: 
+
+      handleSelectChat: from 87
+      
+      Backend: 
+        call to route user/remove-notification, with information of the user and the id/property to remove
+
+      Front: mirror the change in backend...
+        1. ...by setting to 0 the property notifications of this conversation.
+        2. ...by changing the object notifications in the uesrInformation state variable.
+      
+  Finally: we change the variable shared with the Navbar, so the useEffect updates the changes:
+        setChangeInNotifications(prev => !prev);
+
