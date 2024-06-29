@@ -128,7 +128,6 @@ router.put("/add-notification/:userId", (req, res, next) => {
         return user.save();
       })
       .then((response) => {
-        console.log(response.notifications)
         res.json(response);
       })
       .catch(error => {

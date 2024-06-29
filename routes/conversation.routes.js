@@ -27,11 +27,14 @@ router.put("/createMessage/:conversationId", (req, res, next) => {
   })
 });
 
-// get all the messages of one conversation => populate of sender not needed
 router.get("/messages/:conversationId", (req, res, next) => {
-  Conversation.findById(req.params.conversationId, '-participants -_id')
+  const { conversationId } = req.params;
+  const { numberRequestedMessages } = req.query;
+  Conversation.findById(conversationId, '-participants -_id')
       .then(response => {
-          res.json(response);
+          console.log("Response:", response.messages.length)
+          const lastMessages = response.messages.slice( - Number(numberRequestedMessages))
+          res.json(lastMessages);
       })
       .catch(error => {
           next(error);
