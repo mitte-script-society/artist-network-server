@@ -113,7 +113,8 @@ const userSchema = new Schema(
     }],
     notifications: {
       type: Map,
-      of: notificationSchema
+      of: notificationSchema,
+      default: {}
     }
   },
   {

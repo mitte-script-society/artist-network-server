@@ -43,11 +43,14 @@ io.on('connection', (socket) => {
   socket.on ("join-chat", (chatId) => {
     //List of existing rooms:  
     const rooms = io.sockets.adapter.rooms;
-    
+    console.log("ChatId:", chatId)
+    console.log("Original state of Rooms:", rooms)
+      
     //Evaluate if a socket with this chat_id already exists: 
     if (rooms.has (chatId)) {
-      console.log("romm already exists. Appending user to this chatroom")
+      console.log("Room already exists. Appending user to this chatroom")
       socket.join(chatId)
+      console.log("New state of Rooms:", io.sockets.adapter.rooms)
 
       //We emmit a signal to both users, so they know that the counterpart is online
       io.to(chatId).emit('other-joined'); 
@@ -56,6 +59,8 @@ io.on('connection', (socket) => {
       //We create the new room. In client, isOtherOnline will remain false
       socket.join(chatId)
       console.log("New chat created")
+      console.log("New state of Rooms:", io.sockets.adapter.rooms)
+
     }
 
   })
@@ -64,6 +69,8 @@ io.on('connection', (socket) => {
     console.log("Leaving chat", chatId)
     socket.leave(chatId);
     socket.to(chatId).emit('other-left');
+    console.log("New state of Rooms:", io.sockets.adapter.rooms)
+
   });
 
   socket.on ("new message", ( {destiny, newMessage}) => {
