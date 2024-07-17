@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
       }
   });
 
-  socket.on ("join-chat", (chatId) => {
+ /*  socket.on ("join-chat", (chatId) => {
     //List of existing rooms:  
     const rooms = io.sockets.adapter.rooms;
     console.log("ChatId:", chatId)
@@ -63,24 +63,64 @@ io.on('connection', (socket) => {
 
     }
 
-  })
+  }) */
 
-  socket.on('leave-chat', (chatId) => {
-    console.log("Leaving chat", chatId)
-    socket.leave(chatId);
-    socket.to(chatId).emit('other-left');
-    console.log("New state of Rooms:", io.sockets.adapter.rooms)
+    socket.on ("join-chat", ( recipientId, originId ) => {
+      const recipientRoom = recipientId
+      const rooms = io.sockets.adapter.rooms;
+      if (rooms.has(recipientRoom)) {
+        console.log("Contraparte conectada al sitio")
+        io.to(recipientRoom).emit('check-other-online', originId);
+      } else {
+        console.log("Not connected")
+          return
+        }
+    })
 
-  });
+    socket.on ("other is online", ( recipientId, originId ) => { //a quién, quién avisa
+      const recipientRoom = recipientId
+      const rooms = io.sockets.adapter.rooms;
+      if (rooms.has(recipientRoom)) {
+        console.log("Avisando al usuario que la contraparte sí está conectada")
+        io.to(recipientRoom).emit('confirm other online', originId);
+      } else {
+        console.log("Not connected")
+          return
+        }
+    })
 
-  socket.on ("new message", ( {destiny, newMessage}) => {
-    console.log("destiny:", destiny)
-    console.log("message:", newMessage)
-    socket.to(destiny).emit("new message", newMessage)
-  })
 
-  socket.on ("user typing", (destiny) => {
-    socket.to(destiny).emit("user typing")
+   socket.on('leave-chat', ( recipientId, originId ) => {
+    console.log("User left chat")
+    const recipientRoom = recipientId
+      const rooms = io.sockets.adapter.rooms;
+      if (rooms.has(recipientRoom)) {
+        console.log("notify other user disconnected")
+        io.to(recipientRoom).emit('other left chat', originId);
+      }
+    }); 
+
+    socket.on ("new message", ( recipientId, originId )=> {
+      const recipientRoom = recipientId
+      const rooms = io.sockets.adapter.rooms;
+      if (rooms.has(recipientRoom)) {
+        io.to(recipientRoom).emit('new message', originId);
+      } else {
+        console.log("Not connected")
+          return
+        }
+    })
+
+  socket.on ("user typing", ( recipientId, originId )=> {
+    const recipientRoom = recipientId
+    const rooms = io.sockets.adapter.rooms;
+    if (rooms.has(recipientRoom)) {
+      io.to(recipientRoom).emit('user typing', originId);
+    } else {
+      console.log("Not connected")
+        return
+      }
+  
   })
 
   socket.on('disconnect', () => {
